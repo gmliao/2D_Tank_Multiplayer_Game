@@ -33,8 +33,8 @@ namespace Fusion.Editor {
           VersionInfoGUI(); 
 
           using (new EditorGUI.DisabledScope(HasModified())) {
-            if (GUILayout.Button("Rebuild Object Table (Slow)")) {
-              NetworkProjectConfigUtilities.RebuildObjectTable();
+            if (GUILayout.Button("Rebuild Prefab Table")) {
+              NetworkProjectConfigUtilities.RebuildPrefabTable();
             }
           }
 
@@ -73,8 +73,8 @@ namespace Fusion.Editor {
 
     protected override void Apply() {
       base.Apply();
-
-      if (assetTarget != null) {
+      
+      if (targets != null) {
         for (int i = 0; i < extraDataTargets.Length; ++i) {
           var importer = GetImporter(i);
           var wrapper = GetConfigWrapper(i);
