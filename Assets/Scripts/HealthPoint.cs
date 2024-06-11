@@ -5,7 +5,7 @@ using System;
 
 namespace Game.Core
 {
-    public class HealthPoint : NetworkBehaviour, IDamagable
+    public class HealthPoint : NetworkBehaviour, IDamageable
     {
         [SerializeField] private int maxHP;
         public int MaxHP => maxHP;

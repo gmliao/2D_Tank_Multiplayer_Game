@@ -54,6 +54,8 @@
     "dotnet.defaultSolution": "2D_Tank_Multiplayer_Game.sln",
     "cSpell.words": [
         "Despawn",
+        "Dont",
+        "Mathf",
         "Rigidbody"
     ]
 }
