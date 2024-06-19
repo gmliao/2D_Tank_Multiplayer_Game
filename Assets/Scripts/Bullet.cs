@@ -15,7 +15,7 @@ namespace Game.Core
 
         [Networked] private TickTimer life { get; set; }
 
-        private List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
+        private readonly List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
 
         private Vector3 interpolateFrom;
         private Vector3 interpolateTo;
@@ -28,7 +28,6 @@ namespace Game.Core
 
             networkRigidbody.InterpolationTarget.gameObject.SetActive(true);
 
-            //networkRigidbody.Rigidbody.velocity = Vector2.zero;
             networkRigidbody.Rigidbody.velocity = networkRigidbody.Transform.TransformDirection(Vector2.up) * speed;
         }
 
@@ -39,29 +38,8 @@ namespace Game.Core
                 Runner.Despawn(Object);
             }
 
-            // DetectCollisionToWall();
             DetectCollision();
         }
-
-        // private void OnCollisionEnter2D(Collision2D collision)
-        // {
-        //     Debug.Log("Bullet collided with: " + collision.gameObject.name);
-        //     if (collision.gameObject.CompareTag("Wall"))
-        //     {
-        //         Vector2 inDirection = networkRigidbody.Rigidbody.velocity.normalized;
-        //         Vector2 normal = collision.contacts[0].normal;  // 使用碰撞的第一個接觸點的法線
-        //         Vector2 reflectDirection = Vector2.Reflect(inDirection, normal);
-
-        //         //Debug.Log(other.gameObject.name + "reflectDirection: " + reflectDirection + " other.transform.right: " + other.transform.right);
-
-        //         // 把子彈的方向轉換成反射方向
-        //         networkRigidbody.Rigidbody.velocity = reflectDirection * networkRigidbody.Rigidbody.velocity.magnitude;
-        //         // 物體面向速度向量的方向
-        //         float angle = Mathf.Atan2(reflectDirection.y, reflectDirection.x) * Mathf.Rad2Deg;
-        //         networkRigidbody.Transform.rotation = Quaternion.Euler(0, angle, 0);
-
-        //     }
-        // }
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
@@ -69,21 +47,18 @@ namespace Game.Core
             // Check if the bullet hit a wall
             if (collider.gameObject.CompareTag("Wall"))
             {
-                Debug.Log("Something entered the trigger zone: " + collider.name);
-                // Calculate the reflection vector
+                // 取得入射方向
                 Vector2 inDirection = networkRigidbody.Rigidbody.velocity.normalized;
 
-                Vector2 normal = collider.transform.right;
                 // 跟物件的X軸做反射
+                Vector2 normal = collider.transform.right;
                 Vector2 reflectDirection = Vector2.Reflect(inDirection, normal);
-
-                Debug.Log(collider.gameObject.name + " inDirection:" + inDirection + " reflectDirection:" + reflectDirection + " normal:" + normal);
 
                 // Rotate the bullet to the reflection direction
                 float angle = Mathf.Atan2(reflectDirection.y, reflectDirection.x) * Mathf.Rad2Deg;
                 networkRigidbody.Transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-                // Set the bullet's velocity to the reflection direction
+                // 改變速度方向
                 networkRigidbody.Rigidbody.velocity = reflectDirection * networkRigidbody.Rigidbody.velocity.magnitude;
             }
         }
